@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: recipebook
+  datasource:
+    url: jdbc:mysql://localhost:3306/recipebook
+    username: root
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: update
