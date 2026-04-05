@@ -40,4 +40,25 @@ public class Recipe {
 
     @CreationTimestamp
     private LocalDateTime createdAt;
+
+    // Helper methods to keep both sides of the relationship in sync
+    public void addIngredient(Ingredient ingredient) {
+        ingredients.add(ingredient);
+        ingredient.setRecipe(this);
+    }
+
+    public void addTag(Tag tag) {
+        tags.add(tag);
+        tag.setRecipe(this);
+    }
+
+    public void clearIngredients() {
+        ingredients.forEach(i -> i.setRecipe(null));
+        ingredients.clear();
+    }
+
+    public void clearTags() {
+        tags.forEach(t -> t.setRecipe(null));
+        tags.clear();
+    }
 }

@@ -2,9 +2,13 @@ package com.kritagya.recipebook.mapper;
 
 import com.kritagya.recipebook.dto.request.RecipeRequest;
 import com.kritagya.recipebook.dto.response.RecipeResponse;
+import com.kritagya.recipebook.model.Ingredient;
 import com.kritagya.recipebook.model.Recipe;
+import com.kritagya.recipebook.model.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @AllArgsConstructor
@@ -36,15 +40,22 @@ public class RecipeMapper {
 
         recipe.setTitle(createRequest.getTitle());
         recipe.setDescription(createRequest.getDescription());
-        recipe.setTitle(createRequest.getTitle());
         recipe.setInstruction(createRequest.getInstructions());
         recipe.setPrepTimeMins(createRequest.getPrepTimeMins());
         recipe.setCookTimeMins(createRequest.getCookTimeMins());
         recipe.setServings(createRequest.getServings());
         recipe.setImageURL(createRequest.getImageURL());
-        recipe.setIngredients(createRequest.getIngredients().stream().map(ingredientMapper::toCreate).toList());
-        recipe.setTags(createRequest.getTags().stream().map(tagMapper::toCreate).toList());
 
+        if (createRequest.getIngredients() != null) {
+            createRequest.getIngredients().forEach(i ->
+                    recipe.addIngredient(ingredientMapper.toCreate(i))
+            );
+        }
+
+        if (createRequest.getTags() != null) {
+            createRequest.getTags().forEach(r ->
+                    recipe.addTag(tagMapper.toCreate(r)));
+        }
         return recipe;
     }
 }

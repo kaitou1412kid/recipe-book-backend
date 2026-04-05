@@ -2,6 +2,7 @@ package com.kritagya.recipebook.service;
 
 import com.kritagya.recipebook.dto.request.RecipeRequest;
 import com.kritagya.recipebook.dto.response.RecipeResponse;
+import com.kritagya.recipebook.exception.RecipeNotFoundException;
 import com.kritagya.recipebook.mapper.RecipeMapper;
 import com.kritagya.recipebook.model.Recipe;
 import com.kritagya.recipebook.repository.RecipeRepository;
@@ -30,7 +31,7 @@ public class RecipeService {
     public RecipeResponse getById(Long id){
         return recipeRepository.findById(id)
                 .map(recipeMapper::toResponse)
-                .orElseThrow();// Add global exception handler
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found."));
     }
 
     public RecipeResponse create(RecipeRequest request){
