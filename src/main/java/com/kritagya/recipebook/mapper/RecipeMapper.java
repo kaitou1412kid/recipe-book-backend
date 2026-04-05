@@ -58,4 +58,28 @@ public class RecipeMapper {
         }
         return recipe;
     }
+
+    public void toUpdate(RecipeRequest request, Recipe recipe){
+        recipe.setTitle(request.getTitle());
+        recipe.setDescription(request.getDescription());
+        recipe.setInstruction(request.getInstructions());
+        recipe.setPrepTimeMins(request.getPrepTimeMins());
+        recipe.setCookTimeMins(request.getCookTimeMins());
+        recipe.setServings(request.getServings());
+        recipe.setImageURL(request.getImageURL());
+
+        recipe.clearIngredients();
+        recipe.clearTags();
+
+        if (request.getIngredients() != null) {
+            request.getIngredients().forEach(i ->
+                    recipe.addIngredient(ingredientMapper.toCreate(i))
+            );
+        }
+
+        if (request.getTags() != null) {
+            request.getTags().forEach(r ->
+                    recipe.addTag(tagMapper.toCreate(r)));
+        }
+    }
 }

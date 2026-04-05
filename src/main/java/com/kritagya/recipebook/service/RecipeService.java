@@ -39,4 +39,15 @@ public class RecipeService {
         return recipeMapper.toResponse(recipeRepository.save(recipe));
     }
 
+    public RecipeResponse update(Long id, RecipeRequest request){
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found."));
+
+        recipeMapper.toUpdate(request, recipe);
+        return recipeMapper.toResponse(recipeRepository.save(recipe));
+    }
+
+    public void delete(Long id){
+        recipeRepository.deleteById(id);
+    }
 }
