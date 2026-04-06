@@ -14,7 +14,6 @@ public class RecipeRequest {
     private Integer prepTimeMins;
     private Integer cookTimeMins;
     private Integer servings;
-    private String imageURL;
     private List<IngredientRequest> ingredients;
     private List<String> tags;
 }

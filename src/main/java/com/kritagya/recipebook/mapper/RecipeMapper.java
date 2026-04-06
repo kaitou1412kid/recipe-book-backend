@@ -44,7 +44,6 @@ public class RecipeMapper {
         recipe.setPrepTimeMins(createRequest.getPrepTimeMins());
         recipe.setCookTimeMins(createRequest.getCookTimeMins());
         recipe.setServings(createRequest.getServings());
-        recipe.setImageURL(createRequest.getImageURL());
 
         if (createRequest.getIngredients() != null) {
             createRequest.getIngredients().forEach(i ->
@@ -66,7 +65,6 @@ public class RecipeMapper {
         recipe.setPrepTimeMins(request.getPrepTimeMins());
         recipe.setCookTimeMins(request.getCookTimeMins());
         recipe.setServings(request.getServings());
-        recipe.setImageURL(request.getImageURL());
 
         recipe.clearIngredients();
         recipe.clearTags();

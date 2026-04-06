@@ -10,7 +10,14 @@ import com.kritagya.recipebook.repository.RecipeSpecification;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 @Service
@@ -34,11 +41,13 @@ public class RecipeService {
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found."));
     }
 
+    @Transactional
     public RecipeResponse create(RecipeRequest request){
         Recipe recipe = recipeMapper.toCreate(request);
         return recipeMapper.toResponse(recipeRepository.save(recipe));
     }
 
+    @Transactional
     public RecipeResponse update(Long id, RecipeRequest request){
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found."));
@@ -49,5 +58,24 @@ public class RecipeService {
 
     public void delete(Long id){
         recipeRepository.deleteById(id);
+    }
+
+    public void uploadImage(Long id, MultipartFile image) throws IOException {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found."));
+
+        Path uploadPath = Paths.get("uploads/");
+        if(!Files.exists(uploadPath)){
+            Files.createDirectories(uploadPath);
+        }
+
+        String fileName = image.getOriginalFilename();
+        Path filePath = uploadPath.resolve(fileName);
+
+        Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+        recipe.setImageURL(filePath.toString());
+
+        recipeRepository.save(recipe);
     }
 }
